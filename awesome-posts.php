@@ -2,7 +2,7 @@
 /*
 Plugin Name: Awesome Posts
 Description: Adds a custom post type 'Awesome Posts' with specific fields and saves to a CSV file.
-Version: 1.1
+Version: 1.2
 Author: Roman Cherkasov
 */
 
@@ -44,6 +44,16 @@ function awesome_posts_add_meta_boxes() {
 }
 add_action('add_meta_boxes', 'awesome_posts_add_meta_boxes');
 
+// Enqueue media library scripts for image upload
+function awesome_posts_enqueue_media_uploader() {
+    global $typenow;
+    if ($typenow == 'awesome_post') {
+        wp_enqueue_media();
+        wp_enqueue_script('awesome-posts-script', plugin_dir_url(__FILE__) . 'awesome-posts.js', array('jquery'), null, true);
+    }
+}
+add_action('admin_enqueue_scripts', 'awesome_posts_enqueue_media_uploader');
+
 // Meta box fields callback function
 function awesome_posts_fields_callback($post) {
     wp_nonce_field('save_awesome_posts_meta', 'awesome_posts_nonce');
@@ -75,24 +85,6 @@ function awesome_posts_fields_callback($post) {
         <input type="text" id="image" name="image" value="<?php echo esc_url($image); ?>" />
         <input type="button" id="upload_image_button" class="button" value="Upload Image" />
     </p>
-
-    <script>
-        jQuery(document).ready(function($) {
-            $('#upload_image_button').click(function(e) {
-                e.preventDefault();
-                var custom_uploader = wp.media({
-                    title: 'Upload Image',
-                    button: {
-                        text: 'Use this image'
-                    },
-                    multiple: false
-                }).open().on('select', function() {
-                    var attachment = custom_uploader.state().get('selection').first().toJSON();
-                    $('#image').val(attachment.url);
-                });
-            });
-        });
-    </script>
     <?php
 }
 
@@ -116,14 +108,7 @@ function awesome_posts_save_meta($post_id) {
     update_post_meta($post_id, 'start_date', sanitize_text_field($_POST['start_date']));
     update_post_meta($post_id, 'end_date', sanitize_text_field($_POST['end_date']));
     update_post_meta($post_id, 'image', esc_url_raw($_POST['image']));
-
-    // Save hidden fields
-    update_post_meta($post_id, 'weight', '10lbs.');
-    update_post_meta($post_id, 'height', '7FT');
-    update_post_meta($post_id, 'color', 'Green');
-    update_post_meta($post_id, 'material', 'Canvas');
 }
-add_action('save_post', 'awesome_posts_save_meta');
 
 // Save the post data to a CSV file
 function awesome_posts_save_to_csv($post_id) {
@@ -131,10 +116,9 @@ function awesome_posts_save_to_csv($post_id) {
         return;
     }
 
-    // Path to save CSV files
     $csv_dir = WP_CONTENT_DIR . '/awesome-posts';
     if (!is_dir($csv_dir)) {
-        mkdir($csv_dir, 0755, true); // Create directory if it doesn't exist
+        mkdir($csv_dir, 0755, true);
     }
 
     $file = $csv_dir . '/awesome_posts.csv';
