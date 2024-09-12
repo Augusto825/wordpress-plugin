@@ -1,28 +1,28 @@
 <?php
 /*
-Plugin Name: Awesome Posts
-Description: Adds a custom post type 'Awesome Posts' with specific fields and saves to a CSV file.
+Plugin Name: Posts to csv 2024
+Description: Adds a custom post type 'Posts to csv 2024' with specific fields and saves to a CSV file.
 Version: 1.2
-Author: Augusto Neto
+Author: Roman Cherkasov
 */
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-// Register the 'Awesome Posts' Custom Post Type
-function awesome_posts_custom_post_type() {
+// Register the 'Posts to csv 2024' Custom Post Type
+function posts_to_csv_2024_custom_post_type() {
     $labels = array(
-        'name' => 'Awesome Posts',
-        'singular_name' => 'Awesome Post',
-        'menu_name' => 'Awesome Posts',
-        'add_new_item' => 'Add New Awesome Post',
-        'edit_item' => 'Edit Awesome Post',
-        'new_item' => 'New Awesome Post',
-        'view_item' => 'View Awesome Post',
-        'all_items' => 'All Awesome Posts',
-        'search_items' => 'Search Awesome Posts',
-        'not_found' => 'No Awesome Posts found',
+        'name' => 'Posts to csv 2024',
+        'singular_name' => 'Post to csv 2024',
+        'menu_name' => 'Posts to csv 2024',
+        'add_new_item' => 'Add New Post to csv 2024',
+        'edit_item' => 'Edit Post to csv 2024',
+        'new_item' => 'New Post to csv 2024',
+        'view_item' => 'View Post to csv 2024',
+        'all_items' => 'All Posts to csv 2024',
+        'search_items' => 'Search Posts to csv 2024',
+        'not_found' => 'No Posts to csv 2024 found',
     );
 
     $args = array(
@@ -34,29 +34,29 @@ function awesome_posts_custom_post_type() {
         'show_in_rest' => true, // For Gutenberg support
     );
 
-    register_post_type('awesome_post', $args);
+    register_post_type('post_to_csv_2024', $args);
 }
-add_action('init', 'awesome_posts_custom_post_type');
+add_action('init', 'posts_to_csv_2024_custom_post_type');
 
 // Add custom meta fields
-function awesome_posts_add_meta_boxes() {
-    add_meta_box('awesome_post_fields', 'Awesome Post Fields', 'awesome_posts_fields_callback', 'awesome_post', 'normal', 'default');
+function posts_to_csv_2024_add_meta_boxes() {
+    add_meta_box('post_to_csv_2024_fields', 'Post to csv 2024 Fields', 'posts_to_csv_2024_fields_callback', 'post_to_csv_2024', 'normal', 'default');
 }
-add_action('add_meta_boxes', 'awesome_posts_add_meta_boxes');
+add_action('add_meta_boxes', 'posts_to_csv_2024_add_meta_boxes');
 
 // Enqueue media library scripts for image upload
-function awesome_posts_enqueue_media_uploader() {
+function posts_to_csv_2024_enqueue_media_uploader() {
     global $typenow;
-    if ($typenow == 'awesome_post') {
+    if ($typenow == 'post_to_csv_2024') {
         wp_enqueue_media();
-        wp_enqueue_script('awesome-posts-script', plugin_dir_url(__FILE__) . 'awesome-posts.js', array('jquery'), null, true);
+        wp_enqueue_script('posts-to-csv-2024-script', plugin_dir_url(__FILE__) . 'post-to-csv-2024.js', array('jquery'), null, true);
     }
 }
-add_action('admin_enqueue_scripts', 'awesome_posts_enqueue_media_uploader');
+add_action('admin_enqueue_scripts', 'posts_to_csv_2024_enqueue_media_uploader');
 
 // Meta box fields callback function
-function awesome_posts_fields_callback($post) {
-    wp_nonce_field('save_awesome_posts_meta', 'awesome_posts_nonce');
+function posts_to_csv_2024_fields_callback($post) {
+    wp_nonce_field('save_posts_to_csv_2024_meta', 'posts_to_csv_2024_nonce');
 
     $text1 = get_post_meta($post->ID, 'text_1', true);
     $text2 = get_post_meta($post->ID, 'text_2', true);
@@ -89,14 +89,14 @@ function awesome_posts_fields_callback($post) {
 }
 
 // Save the custom fields
-function awesome_posts_save_to_csv($post_id) {
-    // Make sure it's the 'awesome_post' post type and check for autosave
-    if (get_post_type($post_id) != 'awesome_post' || defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+function posts_to_csv_2024_save_to_csv($post_id) {
+    // Make sure it's the 'post_to_csv_2024' post type and check for autosave
+    if (get_post_type($post_id) != 'post_to_csv_2024' || defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
     // Verify the nonce
-    if (!isset($_POST['awesome_posts_nonce']) || !wp_verify_nonce($_POST['awesome_posts_nonce'], 'save_awesome_posts_meta')) {
+    if (!isset($_POST['posts_to_csv_2024_nonce']) || !wp_verify_nonce($_POST['posts_to_csv_2024_nonce'], 'save_posts_to_csv_2024_meta')) {
         return;
     }
 
@@ -118,7 +118,7 @@ function awesome_posts_save_to_csv($post_id) {
     }
 
     // Set CSV directory
-    $csv_dir = WP_CONTENT_DIR . '/awesome-posts';
+    $csv_dir = WP_CONTENT_DIR . '/posts-to-csv-2024';
 
     // Check if the directory exists; if not, create it
     if (!is_dir($csv_dir)) {
@@ -129,7 +129,7 @@ function awesome_posts_save_to_csv($post_id) {
     }
 
     // Set the file path for the CSV file
-    $file = $csv_dir . '/awesome_posts.csv';
+    $file = $csv_dir . '/posts_to_csv_2024.csv';
 
     // Check if the file exists
     $csv_exists = file_exists($file);
@@ -175,5 +175,5 @@ function awesome_posts_save_to_csv($post_id) {
     // Close the CSV file
     fclose($csv);
 }
-add_action('save_post', 'awesome_posts_save_to_csv');
+add_action('save_post', 'posts_to_csv_2024_save_to_csv');
 
