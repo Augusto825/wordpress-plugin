@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: Post to csv 2024
-Description: Adds a custom post type 'Post to csv 2024' with specific fields and saves to a CSV file.
+Plugin Name: Posts to csv 2024
+Description: Adds a custom post type 'Posts to csv 2024' with specific fields and saves to a CSV file.
 Version: 1.2
 Author: Roman Cherkasov
 */
@@ -10,19 +10,19 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-// Register the 'Post to csv 2024' Custom Post Type
+// Register the 'Posts to csv 2024' Custom Post Type
 function posts_to_csv_2024_custom_post_type() {
     $labels = array(
-        'name' => 'Post to csv 2024',
+        'name' => 'Posts to csv 2024',
         'singular_name' => 'Post to csv 2024',
-        'menu_name' => 'Post to csv 2024',
+        'menu_name' => 'Posts to csv 2024',
         'add_new_item' => 'Add New Post to csv 2024',
         'edit_item' => 'Edit Post to csv 2024',
         'new_item' => 'New Post to csv 2024',
         'view_item' => 'View Post to csv 2024',
-        'all_items' => 'All Post to csv 2024',
-        'search_items' => 'Search Post to csv 2024',
-        'not_found' => 'No Post to csv 2024 found',
+        'all_items' => 'All Posts to csv 2024',
+        'search_items' => 'Search Posts to csv 2024',
+        'not_found' => 'No Posts to csv 2024 found',
     );
 
     $args = array(
