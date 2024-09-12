@@ -49,7 +49,7 @@ function posts_to_csv_2024_enqueue_media_uploader() {
     global $typenow;
     if ($typenow == 'post_to_csv_2024') {
         wp_enqueue_media();
-        wp_enqueue_script('posts-to-csv-2024-script', plugin_dir_url(__FILE__) . 'post-to-csv-2024.js', array('jquery'), null, true);
+        wp_enqueue_script('posts-to-csv-2024-script', plugin_dir_url(__FILE__) . 'posts-to-csv-2024.js', array('jquery'), null, true);
     }
 }
 add_action('admin_enqueue_scripts', 'posts_to_csv_2024_enqueue_media_uploader');
